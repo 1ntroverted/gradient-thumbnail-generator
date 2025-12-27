@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>스토리 그라데이션 썸네일 생성기</title>
+  <style>
+    body {
+      background:#000000;
+      color:#eee;
+      font-family: monospace;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      padding:20px;
+    }
+    textarea {
+      width:400px;
+      height:30px;
+      text-align: center;
+      background:#000;
+      color:#ffffff;
+      border:1px solid #444;
+      padding:10px;
+      resize:none;
+      font-family: inter;
+      font-size: 25px;
+    }
+    button {
+      padding:8px 16px;
+      background:#222;
+      color:#fff;
+      border:1px solid #555;
+      cursor:pointer;
+    }
+    button:hover { background:#333; }
+    canvas {
+      border:1px solid #555;
+      background:#000;
+    }
+  </style>
+</head>
+<body>
+  <h2>Story Gradation Thumbnail</h2>
+  <textarea id="asciiInput"></textarea>
+
+  <div>
+    <button onclick="renderArt()">미리보기</button>
+    <button onclick="downloadImage()">다운로드</button>
+  </div>
+  <div>
+    배경 색 <input type="color" value="#000000" id="colorbg">
+  </div>
+  <div>
+    왼쪽 색 <input type="color" value="#FF0000" id="color1">
+    오른쪽 색 <input type="color" value="#FFFF00" id="color2">
+  </div>
+  <canvas id="canvas" width="1280" height="720"></canvas>
+
+  <script>
+    date = new Date();
+    year = date.getFullYear();
+    month = String(date.getMonth() + 1).padStart(2, '0');
+    day = String(date.getDate() + 1).padStart(2, '0');
+    function getToday() {
+      document.getElementById('asciiInput').value = year + "." + month + "." + day + ".";
+    }
+    window.onload = function () {
+      getToday();
+    };
+
+    const colorPicker = document.getElementById('colorbg');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const colorone = document.getElementById('color1');
+    const colortwo = document.getElementById('color2');
+
+    function renderArt() {
+      const text = document.getElementById('asciiInput').value;
+      ctx.fillStyle = colorPicker.value;
+      ctx.textAlign = 'center'
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const grad = ctx.createLinearGradient(0, 285, 0, 435);
+
+      grad.addColorStop(0, colorone.value);
+      grad.addColorStop(1, colortwo.value);
+      ctx.fillStyle = grad;
+      ctx.font = '900 italic 160px inter';
+      ctx.textBaseline = 'middle';
+
+      const lines = text.split('\n');
+      const lineHeight = 28;
+      let y = 40;
+
+      for (let line of lines) {
+        ctx.fillText(line, canvas.width / 2, canvas.height / 2);
+        y += lineHeight;
+      }
+    }
+
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = month + day + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    renderArt();
+  </script>
+</body>
+</html>
