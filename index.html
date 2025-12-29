@@ -7,7 +7,7 @@
     body {
       background:#000000;
       color:#eee;
-      font-family: monospace;
+      font-family: Inter;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -23,7 +23,7 @@
       border:1px solid #444;
       padding:10px;
       resize:none;
-      font-family: inter;
+      font-family: Inter;
       font-size: 25px;
     }
     button {
@@ -45,7 +45,6 @@
   <textarea id="asciiInput"></textarea>
 
   <div>
-    <button onclick="renderArt()">미리보기</button>
     <button onclick="downloadImage()">다운로드</button>
   </div>
   <div>
@@ -58,10 +57,13 @@
   <canvas id="canvas" width="1280" height="720"></canvas>
 
   <script>
+    // thank you ai
+    // 내일 날짜 구하기
     date = new Date();
+    date.setDate(date.getDate() + 1)
     year = date.getFullYear();
     month = String(date.getMonth() + 1).padStart(2, '0');
-    day = String(date.getDate() + 1).padStart(2, '0');
+    day = String(date.getDate()).padStart(2, '0');
     function getToday() {
       document.getElementById('asciiInput').value = year + "." + month + "." + day + ".";
     }
@@ -76,17 +78,18 @@
     const colortwo = document.getElementById('color2');
 
     function renderArt() {
-      const text = document.getElementById('asciiInput').value;
+      // 배경
       ctx.fillStyle = colorPicker.value;
-      ctx.textAlign = 'center'
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // 텍스트
+      const text = document.getElementById('asciiInput').value;
       const grad = ctx.createLinearGradient(0, 285, 0, 435);
-
       grad.addColorStop(0, colorone.value);
       grad.addColorStop(1, colortwo.value);
       ctx.fillStyle = grad;
-      ctx.font = '900 italic 160px inter';
+      ctx.font = '190px Sniglet';
+      ctx.textAlign = 'center'
       ctx.textBaseline = 'middle';
 
       const lines = text.split('\n');
@@ -99,14 +102,18 @@
       }
     }
 
+    // 다운로드
     function downloadImage() {
       const link = document.createElement('a');
       link.download = month + day + '.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
     }
-
-    renderArt();
+    
+    // 미리 보기
+    const timer = setInterval(() => {
+      renderArt();
+    },50)
   </script>
 </body>
 </html>
