@@ -31,7 +31,7 @@
       font-size: 25px;
     }
     #fontsize_text {
-      width:45px;
+      width:40px;
       height:21px;
       border-style: none;
       font-size: 16px;
@@ -64,16 +64,21 @@
     <button onclick="downloadImage()">다운로드</button>
   </div>
   <div>
-    배경 색: <input type="color" value="#000000" id="colorbg">
-  </div>
-  <div>
-    색 1: <input type="color" value="#FF0000" id="color1">
-  </div>
-  <div>
+    배경 색: <input type="color" value="#000000" id="colorbg"> |
+    색 1: <input type="color" value="#FF0000" id="color1"> |
     색 2: <input type="color" value="#FFFF00" id="color2">
   </div>
+    폰트 사이즈 조절
+    <div>
+      <input type="range" value="200" max="300" min="50" id="font_size"> <textarea id="fontsize_text">200</textarea>px
+    </div>
   <div>
-    폰트 사이즈: <input type="range" value="200" max="300" min="50" id="font_size"> <textarea id="fontsize_text">200</textarea>
+    <button onclick="ChangeSize(125)">125px</button>
+    <button onclick="ChangeSize(150)">150px</button>
+    <button onclick="ChangeSize(175)">175px</button>
+    <button onclick="ChangeSize(200)">200px</button>
+    <button onclick="ChangeSize(225)">225px</button>
+    <button onclick="ChangeSize(250)">250px</button>
   </div>
   <canvas id="canvas" width="1280" height="720"></canvas>
 
@@ -98,6 +103,7 @@
     const colortwo = document.getElementById('color2');
     const fontsize = document.getElementById('font_size');
     const fontsizetext = document.getElementById('fontsize_text');
+    const sizeinput = document.getElementById('fontsizeinput');
 
     function renderArt() {
       // 배경
@@ -110,7 +116,8 @@
       grad.addColorStop(0, colorone.value);
       grad.addColorStop(1, colortwo.value);
       ctx.fillStyle = grad;
-      fontsizetext.value = fontsize.value;
+      if(fontsizetext.value != fontsize.value)
+        fontsizetext.value = fontsize.value;
       ctx.font = fontsize.value + 'px Sniglet';
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle';
@@ -123,6 +130,11 @@
         ctx.fillText(line, canvas.width / 2, canvas.height / 2);
         y += lineHeight;
       }
+    }
+
+    function ChangeSize(value) {
+      fontsize.value = value;
+      fontsizetext.value = fontsize.value;
     }
 
     // 다운로드
