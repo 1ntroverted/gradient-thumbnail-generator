@@ -15,16 +15,24 @@
       padding:20px;
     }
     textarea {
-      width:400px;
-      height:30px;
       text-align: center;
       background:#000;
       color:#ffffff;
-      border:1px solid #444;
-      padding:10px;
       resize:none;
       font-family: Inter;
+    }
+    #asciiInput {
+      width:400px;
+      height:30px;
+      border:1px solid #444;
+      padding:10px;
       font-size: 25px;
+    }
+    #fontsize_text {
+      width:45px;
+      height:21px;
+      border-style: none;
+      font-size: 16px;
     }
     button {
       padding:8px 16px;
@@ -38,6 +46,12 @@
       border:1px solid #555;
       background:#000;
     }
+    div {
+      display: flex;
+      justify-content: center; /* 가로 중앙 */
+      align-items: center;  /* 세로 중앙 */
+      gap: 5px;
+    }
   </style>
 </head>
 <body>
@@ -48,16 +62,20 @@
     <button onclick="downloadImage()">다운로드</button>
   </div>
   <div>
-    배경 색 <input type="color" value="#000000" id="colorbg">
+    배경 색: <input type="color" value="#000000" id="colorbg">
   </div>
   <div>
-    왼쪽 색 <input type="color" value="#FF0000" id="color1">
-    오른쪽 색 <input type="color" value="#FFFF00" id="color2">
+    색 1: <input type="color" value="#FF0000" id="color1">
+  </div>
+  <div>
+    색 2: <input type="color" value="#FFFF00" id="color2">
+  </div>
+  <div>
+    폰트 사이즈: <input type="range" value="200" max="300" min="50" id="font_size"> <textarea id="fontsize_text">200</textarea>
   </div>
   <canvas id="canvas" width="1280" height="720"></canvas>
 
   <script>
-    // thank you ai
     // 내일 날짜 구하기
     date = new Date();
     date.setDate(date.getDate() + 1)
@@ -76,6 +94,8 @@
     const ctx = canvas.getContext('2d');
     const colorone = document.getElementById('color1');
     const colortwo = document.getElementById('color2');
+    const fontsize = document.getElementById('font_size');
+    const fontsizetext = document.getElementById('fontsize_text');
 
     function renderArt() {
       // 배경
@@ -84,11 +104,12 @@
 
       // 텍스트
       const text = document.getElementById('asciiInput').value;
-      const grad = ctx.createLinearGradient(0, 285, 0, 435);
+      const grad = ctx.createLinearGradient(0, 360-fontsize.value/200*60, 0, 360+fontsize.value/200*60);
       grad.addColorStop(0, colorone.value);
       grad.addColorStop(1, colortwo.value);
       ctx.fillStyle = grad;
-      ctx.font = '190px Sniglet';
+      fontsizetext.value = fontsize.value;
+      ctx.font = fontsize.value + 'px Sniglet';
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle';
 
