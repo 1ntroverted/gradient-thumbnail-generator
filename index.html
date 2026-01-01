@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <title>스토리 그라데이션 썸네일 생성기</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sniglet:wght@400;">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:wght=400;">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jua:wght=400;">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Gothic:wght=400;">
   <style>
     body {
       background:#000000;
@@ -54,24 +56,33 @@
       align-items: center;  /* 세로 중앙 */
       gap: 5px;
     }
+    select {
+      display: flex;
+      justify-content: center; /* 가로 중앙 */
+      align-items: center;  /* 세로 중앙 */
+      background: #000;
+      color: #fff;
+      height: 30px;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
   <h2>Story Gradation Thumbnail</h2>
-  <textarea id="asciiInput"></textarea>
 
   <div>
-    <button onclick="downloadImage()">다운로드</button>
+    폰트 선택: 
+    <select id="fontselect">
+      <option>Inter</option>
+      <option>Jua</option>
+      <option>Nanum Gothic</option>
+      <option>Sniglet</option>
+
+    </select>
   </div>
   <div>
-    배경 색: <input type="color" value="#000000" id="colorbg"> |
-    색 1: <input type="color" value="#FF0000" id="color1"> |
-    색 2: <input type="color" value="#FFFF00" id="color2">
+    폰트 사이즈: <input type="range" value="175" max="300" min="50" id="font_size"> <textarea id="fontsize_text">175</textarea>px
   </div>
-    폰트 사이즈 조절
-    <div>
-      <input type="range" value="200" max="300" min="50" id="font_size"> <textarea id="fontsize_text">200</textarea>px
-    </div>
   <div>
     <button onclick="ChangeSize(125)">125px</button>
     <button onclick="ChangeSize(150)">150px</button>
@@ -79,6 +90,14 @@
     <button onclick="ChangeSize(200)">200px</button>
     <button onclick="ChangeSize(225)">225px</button>
     <button onclick="ChangeSize(250)">250px</button>
+  </div>
+  <div>
+    배경 색: <input type="color" value="#000000" id="colorbg"> |
+    색 1: <input type="color" value="#FF0000" id="color1"> |
+    색 2: <input type="color" value="#FFFF00" id="color2">
+  </div>
+  <div>
+    <button onclick="downloadImage()">다운로드</button>
   </div>
   <canvas id="canvas" width="1280" height="720"></canvas>
 
@@ -89,9 +108,6 @@
     year = date.getFullYear();
     month = String(date.getMonth() + 1).padStart(2, '0');
     day = String(date.getDate()).padStart(2, '0');
-    function getToday() {
-      document.getElementById('asciiInput').value = year + "." + month + "." + day + ".";
-    }
     window.onload = function () {
       getToday();
     };
@@ -104,6 +120,7 @@
     const fontsize = document.getElementById('font_size');
     const fontsizetext = document.getElementById('fontsize_text');
     const sizeinput = document.getElementById('fontsizeinput');
+    const fontselect = document.getElementById('fontselect');
 
     function renderArt() {
       // 배경
@@ -111,14 +128,17 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // 텍스트
-      const text = document.getElementById('asciiInput').value;
+      const text = year + "." + month + "." + day + ".";
       const grad = ctx.createLinearGradient(0, 360-fontsize.value/200*60, 0, 360+fontsize.value/200*60);
       grad.addColorStop(0, colorone.value);
       grad.addColorStop(1, colortwo.value);
       ctx.fillStyle = grad;
       if(fontsizetext.value != fontsize.value)
         fontsizetext.value = fontsize.value;
-      ctx.font = fontsize.value + 'px Sniglet';
+      ctx.font = fontsize.value + 'px ' + fontselect.value;
+      if (fontselect.value == "Inter") {
+        ctx.font = '900 Italic ' + fontsize.value + 'px ' + fontselect.value;
+      }
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle';
 
