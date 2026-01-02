@@ -81,7 +81,7 @@
     </select>
   </div>
   <div>
-    폰트 사이즈: <input type="range" value="175" max="300" min="50" id="font_size"> <textarea id="fontsize_text">175</textarea>px
+    폰트 사이즈: <textarea id="fontsize_text">175</textarea>px
   </div>
   <div>
     <button onclick="ChangeSize(125)">125px</button>
@@ -117,8 +117,7 @@
     const ctx = canvas.getContext('2d');
     const colorone = document.getElementById('color1');
     const colortwo = document.getElementById('color2');
-    const fontsize = document.getElementById('font_size');
-    const fontsizetext = document.getElementById('fontsize_text');
+    const fontsize = document.getElementById('fontsize_text');
     const sizeinput = document.getElementById('fontsizeinput');
     const fontselect = document.getElementById('fontselect');
 
@@ -133,8 +132,6 @@
       grad.addColorStop(0, colorone.value);
       grad.addColorStop(1, colortwo.value);
       ctx.fillStyle = grad;
-      if(fontsizetext.value != fontsize.value)
-        fontsizetext.value = fontsize.value;
       ctx.font = fontsize.value + 'px ' + fontselect.value;
       if (fontselect.value == "Inter") {
         ctx.font = '900 Italic ' + fontsize.value + 'px ' + fontselect.value;
